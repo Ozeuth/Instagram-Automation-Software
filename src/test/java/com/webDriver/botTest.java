@@ -46,6 +46,7 @@ public class botTest {
 
     @Test
     public void startWebDriver() {
+        // Get the user and password from the UI
         while (user == "" || password == "" || tags.length == 0) {
             try {
                 Thread.sleep(3000);
@@ -53,30 +54,32 @@ public class botTest {
                 System.out.println("This should not be happening");
             }
         }
-
+        // Obtains the user and their limit for the day
+        // If new user, creates a new user and sets their limit to max
         this.userData = (String) checkLikeCap(user)[0];
         this.likesForToday = (Integer) checkLikeCap(user)[1];
         this.commentsForToday = (Integer) checkLikeCap(user)[2];
         this.followsForToday = (Integer) checkLikeCap(user)[3];
+        // Setup random comment generator
         Random rnd = new Random();
         rnd.setSeed(1);
         this.rnd = rnd;
+        // User update
         popUpBox(aspect() + " left for today: " + aspectLeft(), 1500);
-
+        // Chromedriver config and run for PC and Mac
         if (isMac) {
             System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/chromedriver");
         } else {
             String directory = System.getProperty("user.dir").replace("\\", "\\\\");
             System.setProperty("webdriver.chrome.driver", directory + "\\chromedriver.exe");
         }
-
         WebDriver driver = new ChromeDriver();
         WebDriverWait wait = new WebDriverWait(driver, 30);
-
+        // Login to instagram
         login(driver, wait, user, password);
-
+        // Waits until you have discarded the custom updates to continue
         waitForInput(driver, wait);
-
+        // Automation begins
         machina(driver, wait, tags);
     }
 
@@ -175,7 +178,7 @@ public class botTest {
                     like(wait, driver);
                 }
                 else if (selectionType == 2) {
-                    like(wait, driver);
+                    comment(wait, driver);
                 } else {
                     follow(wait, driver);
                 }
@@ -263,10 +266,16 @@ public class botTest {
                     System.out.println("Item was not clickable");
                 }
                 System.out.println("I have followed this");
-                followsForToday = followsForToday--;
+                followsForToday--;
                 System.out.println("Follows left " + followsForToday);
                 likeWrite(userData, user, Integer.toString(likesForToday), Integer.toString(commentsForToday), Integer.toString(followsForToday));
-                driver.findElement(By.xpath("//button[contains(text(),'Follow')]")).click();
+                // As of 7/1/2019, follow button is not clickable at the point...
+                // This is because there are actually two follow buttons on screen (one of which is hidden). The catch now properly catches this bug.
+                try {
+                    driver.findElement(By.xpath("//button[contains(text(),'Follow')]")).click();
+                } catch (Exception e){
+                    driver.findElement(By.className("oW_lN")).click();
+                }
             } else {
                 System.out.println("I couldn't find the button");
             }
@@ -282,6 +291,7 @@ public class botTest {
     }
 
     public boolean nextImage(WebDriverWait wait, WebDriver driver) {
+        /*
         List<WebElement> inputs = driver.findElements(By.xpath("//a[@role = 'button']"));
         while (inputs.isEmpty()){
             fixedWait(5000);
@@ -299,7 +309,17 @@ public class botTest {
             return true;
         } else {
             return false;
+        } */
+        // 18/1/2019: Instagram changed back to a class based system.
+        WebElement rightArrow = driver.findElement(By.className("HBoOv"));
+        try{
+            wait.until(ExpectedConditions.elementToBeClickable(rightArrow));
+        } catch (Exception e){
+            System.out.println("right Arrow not clickable");
+            return false;
         }
+        rightArrow.click();
+        return true;
     }
 
 
