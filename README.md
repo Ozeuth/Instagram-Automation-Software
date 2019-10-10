@@ -1,5 +1,5 @@
 # Oz's Instabot
-
+![1](./asset/Instabot_1.jpg)
 A social influencer tool to aid in the automatic gathering of real followers. This helps in increasing user outreach and marketing.
 
 Development: [Penelope Tay](https://github.com/Ozeuth)
@@ -12,12 +12,18 @@ In the future, I may sell this software on a website. For a once-off payment, us
 The website is currently in development by [Chang Sheng Ho](https://www.linkedin.com/in/chang-shen-ho-78067a195/)
 
 ### Current Features
-1. Auto-Likes: The InstaBot allows you to like up to 500 photos a day. This is done in real-time on a Google driver, so you can watch the photos being viewed and liked.
-2. Auto-Commenting The InstaBot allows you to comment on 100 photos a day. You can choose what comments you want to write, and even craft your own list of comments for specific scenarios. This will be elaborated on later. 
-3. Auto-Following: The InstaBot allows you to follow up to 100 people a day. 
-4. Works for Multiple Accounts: You can of course, use this with as many accounts as you want. Each account will have the same daily limits. 
-5. Low Risk of Detection: I have made this Bot as undetectable as possible, within Instagram’s parameters (the daily like limit is 500) 
-6. Private: Your account is yours and yours alone: All your data is stored locally on your computer, and your passwords are not saved.
+1. Auto-Likes  
+The InstaBot allows you to like up to 500 photos a day. This is done in real-time on a Google driver, so you can watch the photos being viewed and liked.
+2. Auto-Commenting  
+The InstaBot allows you to comment on 100 photos a day. You can choose what comments you want to write, and even craft your own list of comments for specific scenarios. This will be elaborated on later. 
+3. Auto-Following  
+The InstaBot allows you to follow up to 100 people a day. 
+4. Works for Multiple Accounts  
+You can of course, use this with as many accounts as you want. Each account will have the same daily limits. 
+5. Low Risk of Detection  
+I have made this Bot as undetectable as possible, within Instagram’s parameters (the daily like limit is 500) 
+6. Private  
+Your account is yours and yours alone: All your data is stored locally on your computer, and your passwords are not saved.
 
 ## Usage
 ### Liking
@@ -25,27 +31,32 @@ The website is currently in development by [Chang Sheng Ho](https://www.linkedin
 2. Enter your Instagram username and password. 
 3. Enter the tags for images you want the bot to like. If there is more than one tag, separate them with commas. 
 4. Tick the LIKE box. 
+![2](./asset/Instabot_2.jpg)
 
 ### Commenting
 First you need to set up what kind of comments you wish your bots to post. 
 1. Click the text file called “comments”. It will look as such on NotePad: 
+![3](./asset/Instabot_3.jpg)
 2. Several premade lists have been added for you. To select the one you want, delete the ‘1’ in front of “Generic: ….” And put the 1 in front of that list.  
-3. You can add/edit that list’s comments. Separate the comments using commas.  
-- NOTE: Do not create a new line by hitting Enter.Add onto existing lines. 
-- NOTE: Instagram will stop you from commenting if the bot repeats the same comment too many times. To avoid this, it is recommended that you have at least 15 comments your list 
-4. You can add your own custom lists. Create a new list at the bottom. Below is an example of an added Movies list. It has been selected via the “1” in front. 
+3. You can add/edit that list’s comments. Separate the comments using commas.
+  - NOTE: Do not create a new line by hitting Enter.Add onto existing lines. 
+  - NOTE: Instagram will stop you from commenting if the bot repeats the same comment too many times. To avoid this, it is recommended that you have at least 15 comments your list
+4. You can add your own custom lists. Create a new list at the bottom. Below is an example of an added Movies list. It has been selected via the “1” in front.
+![4](./asset/Instabot_4.jpg)
 
 Then, we can start commenting.
 1. Click the executable file called “Oz_InstaBot”. 
 2. Enter your Instagram username and password. 
 3. Enter the tags for images you want the bot to comment on. If there is more than one tag, separate them with commas. 
 4. Tick the COMMENT box.
+![5](./asset/Instabot_5.jpg)
 
 ### Following
 1. Click the executable file called “Oz_InstaBot”. 
 2. Enter your Instagram username and password. 
 3. Enter the tags for images for which the users you want the bot to follow. If there is more than one tag, separate them with commas. 
 4. Tick the FOLLOW box. 
+![6](./asset/Instabot_6.jpg)
 
 ## FAQs
 1. My bot tells me “File not found”/ “Comment File not found”  
