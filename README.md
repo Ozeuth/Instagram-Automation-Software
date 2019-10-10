@@ -1,4 +1,4 @@
-# Oz's Instabot
+# Oz's Instabot  
 ![1](./asset/Instabot_1.jpg)
 A social influencer tool to aid in the automatic gathering of real followers. This helps in increasing user outreach and marketing.
 
@@ -30,32 +30,32 @@ Your account is yours and yours alone: All your data is stored locally on your c
 1. Click the executable file called “Oz_InstaBot”.
 2. Enter your Instagram username and password. 
 3. Enter the tags for images you want the bot to like. If there is more than one tag, separate them with commas. 
-4. Tick the LIKE box. 
+4. Tick the LIKE box.  
 ![2](./asset/Instabot_2.jpg)
 
 ### Commenting
 First you need to set up what kind of comments you wish your bots to post. 
-1. Click the text file called “comments”. It will look as such on NotePad: 
+1. Click the text file called “comments”. It will look as such on NotePad:  
 ![3](./asset/Instabot_3.jpg)
 2. Several premade lists have been added for you. To select the one you want, delete the ‘1’ in front of “Generic: ….” And put the 1 in front of that list.  
 3. You can add/edit that list’s comments. Separate the comments using commas.
   - NOTE: Do not create a new line by hitting Enter.Add onto existing lines. 
   - NOTE: Instagram will stop you from commenting if the bot repeats the same comment too many times. To avoid this, it is recommended that you have at least 15 comments your list
-4. You can add your own custom lists. Create a new list at the bottom. Below is an example of an added Movies list. It has been selected via the “1” in front.
+4. You can add your own custom lists. Create a new list at the bottom. Below is an example of an added Movies list. It has been selected via the “1” in front.  
 ![4](./asset/Instabot_4.jpg)
 
 Then, we can start commenting.
 1. Click the executable file called “Oz_InstaBot”. 
 2. Enter your Instagram username and password. 
 3. Enter the tags for images you want the bot to comment on. If there is more than one tag, separate them with commas. 
-4. Tick the COMMENT box.
+4. Tick the COMMENT box.  
 ![5](./asset/Instabot_5.jpg)
 
 ### Following
 1. Click the executable file called “Oz_InstaBot”. 
 2. Enter your Instagram username and password. 
 3. Enter the tags for images for which the users you want the bot to follow. If there is more than one tag, separate them with commas. 
-4. Tick the FOLLOW box. 
+4. Tick the FOLLOW box.  
 ![6](./asset/Instabot_6.jpg)
 
 ## FAQs
