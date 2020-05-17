@@ -127,17 +127,17 @@ public class ui extends JFrame {
 
                 Action action = new AbstractAction() {
                     public void actionPerformed(ActionEvent e) {
-                        botTest.user = ui.this.t1.getText();
-                        botTest.password = String.valueOf(ui.this.p1.getPassword());
-                        botTest.tags = ui.this.t2.getText().split(",");
+                        bot.user = ui.this.t1.getText();
+                        bot.password = String.valueOf(ui.this.p1.getPassword());
+                        bot.tags = ui.this.t2.getText().split(",");
                         if (ui.this.c1.isSelected()) {
-                            botTest.selectionType = 1;
+                            bot.selectionType = 1;
                         } else if (ui.this.c2.isSelected()) {
-                            botTest.selectionType = 2;
+                            bot.selectionType = 2;
                         } else if (ui.this.c3.isSelected()) {
-                            botTest.selectionType = 3;
+                            bot.selectionType = 3;
                         } else {
-                            botTest.selectionType = 1;
+                            bot.selectionType = 1;
                         }
 
                         ui.this.frame.setVisible(false);
