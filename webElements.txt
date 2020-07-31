@@ -3,7 +3,7 @@ images on tag page:_bz0w
 nnGetInstaApp:_7XMpj
 nnGetNotifs:HoLwm
 empty heart color:#262626
-heart button in image tab:wpO6b
+button icons in image tab:wpO6b
 comment bar in image tab:Ypffh
-follow button in image tab:oW_lN
+follow button in image tab:y3zKF
 right arrow button in image tab:_65Bje

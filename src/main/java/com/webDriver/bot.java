@@ -42,7 +42,7 @@ public class bot {
         put("nnGetInstaApp", "");
         put("nnGetNotifs", "");
         put("empty heart color", "");
-        put("heart button in image tab", "");
+        put("button icons in image tab", "");
         put("comment bar in image tab", "");
         put("follow button in image tab", "");
         put("right arrow button in image tab", "");
@@ -271,24 +271,32 @@ public class bot {
 
     private void like(WebDriverWait wait, WebDriver driver) {
         if (likesForToday > 0) {
-            if (isPresent(driver, wait, webElements.get("heart button in image tab"), true)) {
-                WebElement likeIcon = driver.findElement(By.className(webElements.get("heart button in image tab")));
-                List<WebElement> children = likeIcon.findElements(By.tagName("svg"));
+            if (isPresent(driver, wait, webElements.get("button icons in image tab"), true)) {
                 boolean foundEmptyHeart = false;
-                for (WebElement child : children) {
-                    if (child.getAttribute("fill").equals(webElements.get("empty heart color"))) {
-                        foundEmptyHeart = true;
-                        likesForToday--;
-                        System.out.println("I have liked this: " + likesForToday);
-                        likeWrite(userData, user, Integer.toString(likesForToday), Integer.toString(commentsForToday), Integer.toString(followsForToday));
-                        likeIcon.click();
+                List<WebElement> allIcons = driver.findElements(By.className(webElements.get("button icons in image tab")));
+                for (WebElement icon : allIcons) {
+                    List<WebElement> children = icon.findElements(By.tagName("svg"));
+                    for (WebElement child : children) {
+                        if (child.getAttribute("aria-label").equals("Like")
+                                && child.getAttribute("fill").equals(webElements.get("empty heart color"))) {
+                            foundEmptyHeart = true;
+                            likesForToday--;
+                            System.out.println("I have liked this: " + likesForToday);
+                            likeWrite(userData, user, Integer.toString(likesForToday), Integer.toString(commentsForToday), Integer.toString(followsForToday));
+                            icon.click();
+                            break;
+                        }
+                    }
+                    if (foundEmptyHeart) {
+                        // Get first one (Or we'll like all comments too)
+                        break;
                     }
                 }
                 if (!foundEmptyHeart) {
                     System.out.println("I have already liked this");
                 }
             } else {
-                diagnose(driver, wait, webElements.get("heart button in image tab"));
+                diagnose(driver, wait, webElements.get("button icons in image tab"));
             }
         } else {
             popUpBox("Daily like limit reached!", 3000);
@@ -323,23 +331,27 @@ public class bot {
 
     private void follow(WebDriverWait wait, WebDriver driver) {
         if (followsForToday > 0) {
-            if (isPresent(driver, wait, "//button[contains(text(),'Following')]", false)) {
-                System.out.println("I have already followed");
-            } else if (isPresent(driver, wait, "//button[contains(text(),'Follow')]", false)) {
-                followsForToday--;
-                System.out.println("I have followed this: " + followsForToday);
-                likeWrite(userData, user, Integer.toString(likesForToday), Integer.toString(commentsForToday), Integer.toString(followsForToday));
-                // As of 7/1/2019, follow button is not clickable at the point...
-                // This is because there are actually two follow buttons on screen (one of which is hidden). The catch now properly catches this bug.
-                try {
-                    driver.findElement(By.xpath("//button[contains(text(),'Follow')]")).click();
-                } catch (Exception e){
-                    driver.findElement(By.className(webElements.get("follow button in image tab"))).click();
+            if (isPresent(driver, wait, webElements.get("follow button in image tab"), true)) {
+                boolean foundFollow = false;
+                List<WebElement> followIcons = driver.findElements(By.className(webElements.get("follow button in image tab")));
+                for (WebElement followIcon : followIcons) {
+                    if (followIcon.getText().equals("Follow")) {
+                        try {
+                            followIcon.click();
+                            foundFollow = true;
+                        } catch (Exception e) {
+                            System.out.println("Follow button is behind");
+                        }
+                    }
+                    if (foundFollow) {
+                        followsForToday--;
+                        System.out.println("I have followed this: " + followsForToday);
+                        likeWrite(userData, user, Integer.toString(likesForToday), Integer.toString(commentsForToday), Integer.toString(followsForToday));
+                        break;
+                    }
                 }
-            } else {
-                System.out.println("I couldn't find the button");
             }
-        } else {
+        }  else {
             popUpBox("Daily follow limit reached!", 3000);
             System.exit(0);
         }
