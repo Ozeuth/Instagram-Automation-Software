@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -23,7 +23,6 @@ public class bot {
     static String[] tags = {};
     static int selectionType;
     private boolean isMac;
-    private boolean isServer;
 
     private int likesForToday;
     private int commentsForToday;
@@ -37,12 +36,11 @@ public class bot {
     private boolean rightArrowWorks = false;
     // List of Web Elements
     final private Map<String, String> webElements = new HashMap<String, String>() {{
-        put("searchbar on home page", "");
+        put("search button", "");
+        put("searchbar", "");
         put("images on tag page", "");
-        put("nnGetInstaApp", "");
         put("nnGetNotifs", "");
-        put("empty heart color", "");
-        put("button icons in image tab", "");
+        put("like button in image tab", "");
         put("comment bar in image tab", "");
         put("follow button in image tab", "");
         put("right arrow button in image tab", "");
@@ -56,24 +54,15 @@ public class bot {
         String userDataStore = br.readLine().substring(1);*/
 
         this.isMac = isMac;
-        // Get the user and password from Server
-        if (args.length == 4) {
-            isServer = true;
-            user = args[0];
-            password = args[1];
-            tags = args[2].split(",");
-            selectionType = Integer.valueOf(args[3]);
-        } else {
-            // Get the user and password from the UI
-            isServer = false;
-            while (user == "" || password == "" || tags.length == 0) {
-                try {
-                    Thread.sleep(3000);
-                } catch (Exception e) {
-                    System.out.println("This should not be happening");
-                }
+        // Get the user and password from the UI
+        while (user == "" || password == "" || tags.length == 0) {
+            try {
+                Thread.sleep(3000);
+            } catch (Exception e) {
+                System.out.println("This should not be happening");
             }
         }
+
         // Get the web elements
         try {
             FileReader fr = new FileReader("webElements.txt");
@@ -113,15 +102,8 @@ public class bot {
             String directory = System.getProperty("user.dir").replace("\\", "\\\\");
             System.setProperty("webdriver.chrome.driver", directory + "\\chromedriver.exe");
         }
-        WebDriver driver;
-        if (isServer) {
-            // Set up the server in headless mode
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless");
-            driver = new ChromeDriver(options);
-        } else {
-            driver = new ChromeDriver();
-        }
+        WebDriver driver = new ChromeDriver();
+
         driver.manage().window().maximize();
         WebDriverWait wait = new WebDriverWait(driver, 30);
         // Login to instagram
@@ -192,26 +174,25 @@ public class bot {
 
     // This is the automated version
     private void discardNotifications(WebDriver driver, WebDriverWait wait) {
-        boolean searchBarExists = isPresent(driver, wait, webElements.get("searchbar on home page"), true);
-        while (!searchBarExists) {
+        boolean searchButtonClickable = isPresent(driver, wait, webElements.get("search button"), true);
+
+        int nAttempts = 0;
+        while (!searchButtonClickable) {
             // We cycle through the different possible reasons and try to close them
             fixedWait(1000);
-            // 1. Get Instagram App pop-up
-            if (isPresent(driver, wait, webElements.get("nnGetInstaApp"), true)) {
-                driver.findElement(By.className(webElements.get("nnGetInstaApp"))).click();
-                fixedWait(1000);
+            if ( nAttempts % 5 == 0 ) {
+                popUpBox("Please close extra pop-up boxes", 3000);
             }
-            // 2. Get Notification pop-up
-            if (isPresent(driver, wait, webElements.get("nnGetNotifs"), true)) {
-                driver.findElement(By.className(webElements.get("nnGetNotifs"))).click();
-            }
-            searchBarExists = isPresent(driver, wait, webElements.get("searchbar on home page"), true);
-        }
 
-        fixedWait(1000);
-        boolean focusable = false;
-        while (!focusable) {
-            focusable = (driver.findElements(By.className("piCib")).size() == 0);
+            // 1. "Turn on Notifications" -> Not Now
+            if (isPresent(driver, wait, webElements.get("nnGetNotifs"), true)) {
+                driver.findElement(By.xpath(webElements.get("nnGetNotifs"))).click();
+            }
+
+            searchButtonClickable = isPresent(driver, wait, webElements.get("search button"), true);
+            if (searchButtonClickable) {
+            }
+            nAttempts++;
         }
     }
 
@@ -257,46 +238,38 @@ public class bot {
 
 
     private void tagSearch(WebDriver driver, WebDriverWait wait, String tags) {
-        waiter(wait, webElements.get("searchbar on home page"));
-        WebElement searchBar = driver.findElement(By.className(webElements.get("searchbar on home page")));
-        searchBar.clear();
-        searchBar.sendKeys(tags);
-        searchBar.sendKeys(Keys.ENTER);
+        // Checks that usual method of searching would have been possible here
+        waiter(wait, webElements.get("search button"));
+
+        String tagNoHash = tags.substring(1);
+        driver.navigate().to("https://www.instagram.com/explore/tags/" + tagNoHash + "/");
         fixedWait(1500);
-        searchBar.sendKeys(Keys.ENTER);
-        fixedWait(1500);
-        searchBar.sendKeys(Keys.RETURN);
         waiter(wait, webElements.get("images on tag page"));
     }
 
     private void like(WebDriverWait wait, WebDriver driver) {
         if (likesForToday > 0) {
-            if (isPresent(driver, wait, webElements.get("button icons in image tab"), true)) {
-                boolean foundEmptyHeart = false;
-                List<WebElement> allIcons = driver.findElements(By.className(webElements.get("button icons in image tab")));
-                for (WebElement icon : allIcons) {
-                    List<WebElement> children = icon.findElements(By.tagName("svg"));
-                    for (WebElement child : children) {
-                        if (child.getAttribute("aria-label").equals("Like")
-                                && child.getAttribute("fill").equals(webElements.get("empty heart color"))) {
-                            foundEmptyHeart = true;
-                            likesForToday--;
-                            System.out.println("I have liked this: " + likesForToday);
-                            likeWrite(userData, user, Integer.toString(likesForToday), Integer.toString(commentsForToday), Integer.toString(followsForToday));
-                            icon.click();
-                            break;
-                        }
+            if (isPresent(driver, wait, webElements.get("like button in image tab"), true))
+            {
+                WebElement likeButton = driver.findElement(By.className(webElements.get("like button in image tab")));
+                List<WebElement> children = likeButton.findElements(By.tagName("svg"));
+                if (children.size() == 1 ) {
+                    String currStatus = children.get(0).getAttribute("aria-label");
+
+                    if (currStatus.equals("Like")) {
+                        children.get(0).click();
+                        likesForToday--;
+                        System.out.println("I have liked this: " + likesForToday);
+                    } else if (currStatus.equals("Unlike")) {
+                        System.out.println("I have already liked this");
+                    } else {
+                        System.out.println("Unusual liking context");
                     }
-                    if (foundEmptyHeart) {
-                        // Get first one (Or we'll like all comments too)
-                        break;
-                    }
-                }
-                if (!foundEmptyHeart) {
-                    System.out.println("I have already liked this");
+                } else {
+                    System.out.println("Unusual number of like button parameters: " + children.size());
                 }
             } else {
-                diagnose(driver, wait, webElements.get("button icons in image tab"));
+                diagnose(driver, wait, webElements.get("like button in image tab"));
             }
         } else {
             popUpBox("Daily like limit reached!", 3000);
@@ -359,7 +332,7 @@ public class bot {
 
     private boolean nextImage(WebDriverWait wait, WebDriver driver) {
         if (isPresent(driver, wait, webElements.get("right arrow button in image tab"), true)) {
-            driver.findElement(By.className(webElements.get("right arrow button in image tab"))).click();
+            driver.findElement(By.xpath(webElements.get("right arrow button in image tab"))).click();
             rightArrowWorks = true;
             return true;
         } else {
@@ -374,11 +347,16 @@ public class bot {
 
     // Helper functions
     private boolean isPresent(WebDriver driver, WebDriverWait wait, String identifier, boolean isClickable) {
-        boolean elementFound = driver.findElements(By.className(identifier)).size() > 0
-                || driver.findElements(By.xpath(identifier)).size() > 0;
+        boolean elementFound = false;
+        try {
+            elementFound = driver.findElements(By.className(identifier)).size() > 0 || driver.findElements(By.xpath(identifier)).size() > 0;
+        } catch (Exception e) {
+            return false;
+        }
         if (!elementFound) {
             return false;
         }
+        
         if (isClickable) {
             try {
                 wait.until(ExpectedConditions.or(
@@ -415,7 +393,14 @@ public class bot {
     }
 
     private static void waiter(WebDriverWait wait, String identifier) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(identifier)));
+        try {
+        wait.until(ExpectedConditions.or(
+                    ExpectedConditions.visibilityOfElementLocated(By.className(identifier)),
+                    ExpectedConditions.visibilityOfElementLocated(By.xpath(identifier))
+            ));
+        } catch (Exception e) {
+            System.out.println("problem?");
+        }
     }
 
     private static void fixedWait(int time) {

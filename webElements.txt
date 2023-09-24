@@ -1,9 +1,8 @@
-searchbar on home page:XTCLo
-images on tag page:_bz0w
-nnGetInstaApp:_7XMpj
-nnGetNotifs:HoLwm
-empty heart color:#262626
-button icons in image tab:wpO6b
+search button://*[text()='Search']
+searchbar://*[@aria-label='Search input']
+images on tag page:_aagu
+nnGetNotifs://*[text()='Not Now']
+like button in image tab:_aamw
 comment bar in image tab:Ypffh
 follow button in image tab:y3zKF
-right arrow button in image tab:_65Bje
+right arrow button in image tab://*[@aria-label='Next']
