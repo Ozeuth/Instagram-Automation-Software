@@ -1,4 +1,4 @@
-search button://*[text()='Search']
+search button://*[@aria-label='Search']
 searchbar://*[@aria-label='Search input']
 images on tag page:_aagu
 nnGetNotifs://*[text()='Not Now']

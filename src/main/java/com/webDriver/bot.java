@@ -190,8 +190,6 @@ public class bot {
             }
 
             searchButtonClickable = isPresent(driver, wait, webElements.get("search button"), true);
-            if (searchButtonClickable) {
-            }
             nAttempts++;
         }
     }
@@ -241,8 +239,9 @@ public class bot {
         // Checks that usual method of searching would have been possible here
         waiter(wait, webElements.get("search button"));
 
-        String tagNoHash = tags.substring(1);
-        driver.navigate().to("https://www.instagram.com/explore/tags/" + tagNoHash + "/");
+        String tagNoHash = "?q=" + tags.substring(1).replace(" ", "%20");
+        driver.navigate().to("https://www.instagram.com/explore/search/keyword/" + tagNoHash);
+
         fixedWait(1500);
         waiter(wait, webElements.get("images on tag page"));
     }
@@ -260,6 +259,7 @@ public class bot {
                         children.get(0).click();
                         likesForToday--;
                         System.out.println("I have liked this: " + likesForToday);
+                        likeWrite(userData, user, Integer.toString(likesForToday), Integer.toString(commentsForToday), Integer.toString(followsForToday));
                     } else if (currStatus.equals("Unlike")) {
                         System.out.println("I have already liked this");
                     } else {
