@@ -8,9 +8,6 @@ Development: [Penelope Tay](https://github.com/Ozeuth)
 ### Current Progress: Complete with Maintenance. Possible Extension.
 I update the bot when there are changes to the Instagram algorithm or Web Elements.
 
-In the future, I may sell this software on a website. For a once-off payment, users will gain access to all future updates and technical support.
-The website is currently in development by [Chang Sheng Ho](https://www.linkedin.com/in/chang-shen-ho-78067a195/)
-
 ### Current Features
 1. Auto-Likes  
 The InstaBot allows you to like up to 500 photos a day. This is done in real-time on a Google driver, so you can watch the photos being viewed and liked.
